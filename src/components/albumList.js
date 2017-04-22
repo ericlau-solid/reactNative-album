@@ -1,31 +1,29 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { View } from 'react-native';
+import AlbumDetail from './albumDetail';
 
-const AlbumList = () => {
-    // const { textStyle, viewStyle } = styles;
+const requestUrl = 'http://rallycoding.herokuapp.com/api/music_albums';
+
+class AlbumList extends Component {
+  state = { albums: [] };
+
+  componentWillMount() {
+    fetch(requestUrl)
+      .then(response => response.json())
+      .then(data => this.setState({ albums: data }));
+  }
+
+  renderAlbums() {
+    return this.state.albums.map(album => <AlbumDetail key={album.title} album={album} />);
+  }
+
+  render() {
     return (
-    <View>
-        <Text>Album list!!</Text>
-    </View>
+      <View>
+        {this.renderAlbums()}
+      </View>
     );
-};
-
-// const styles = {
-//     viewStyle: {
-//         backgroundColor: '#F8F8F8',
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         height: 60,
-//         paddingTop: 15,
-//         shadowColor: '#000',
-//         shadowOffset: { width: 0, height: 2 },
-//         shadowOpacity: 0.3,
-//         elevation: 2,
-//         position: 'relative',
-//     },
-//     textStyle: {
-//         fontSize: 20
-//     },
-// };
+  }
+}
 
 export default AlbumList;
